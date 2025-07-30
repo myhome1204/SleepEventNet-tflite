@@ -15,7 +15,9 @@ TensorFlow 및 TFLite 지원으로 모바일 환경에서도 활용 가능
 20초 길이의 .wav 오디오 파일을 입력받아 다섯 가지 수면 이벤트 점수를 반환
 
 출력 이벤트: Bruxism (이갈이) , Snoring (코골이) , Cough (기침) , Sleep Speech (수면 중 말하기) , Normal (정상 상태) 에 대한 Score
+
 예시 : 
+
 ```
 bruxism_score: 11.7600
 snoring_score: 0.0000
