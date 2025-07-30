@@ -1,17 +1,17 @@
 # SleepEventNet-tflite
 YAMNet의 사전학습된 음향 특징(score)을 기반으로, 수면 이벤트별 패턴을 식별하는 커스텀 Keras 레이어를 설계하고, 해당 후처리 로직을 YAMNet에 통합하여 TFLite로 경량화한 프로젝트입니다.
 
-💤 SleepEventNet
+## 💤 SleepEventNet
 수면 중 발생하는 다양한 이벤트(이갈이, 코골이, 기침, 수면 중 말하기 등)를 감지하는 사운드 기반 분류 모델
 
-🔍 프로젝트 특징
+## 🔍 프로젝트 특징
 YAMNet 기반 사전학습 모델을 활용하여 음성 이벤트의 특징 추출
 
 커스텀 Keras 레이어를 통해 5가지 수면 이벤트에 대한 점수 출력
 
 TensorFlow 및 TFLite 지원으로 모바일 환경에서도 활용 가능
 
-🎯 주요 기능
+## 🎯 주요 기능
 20초 길이의 .wav 오디오 파일을 입력받아 다섯 가지 수면 이벤트 점수를 반환
 
 출력 이벤트:
@@ -26,14 +26,16 @@ Sleep Speech (수면 중 말하기)
 
 Normal (정상 상태)
 
-⚙️ 환경 설정 (Setup)
+## ⚙️ 환경 설정 (Setup)
 
+```
 conda create -n sleep_env python=3.11 -y
 conda activate sleep_env
 cd [다운받은 경로]
 pip install -r requirements.txt
+```
 
-🔧 사용 방법
+## 🔧 사용 방법
 예제 실행: build_and_test_sleepnet.ipynb 참고
 
 Python 스크립트 실행:
@@ -41,19 +43,20 @@ Python 스크립트 실행:
 python main.py
 main.py 내에서 분석할 .wav 경로 설정 필요
 예시 :
+```
 wav_path = 'data/20_seconds/snoring/1/test3.wav'
 main(wav_path)
-
+```
 TensorFlow 모델 및 TFLite 모델로 둘다 추론 가능
 
-⚠️ 주의 사항
+## ⚠️ 주의 사항
 입력 파일은 반드시 20초 길이의 모노 채널1, .wav 파일이어야 하며,
 샘플링 레이트는 16,000Hz, 데이터 타입은 float32, 값의 범위는 -1 ~ 1로 조정 필요
 
 main.py 및 내부 함수에서는 자동 전처리가 포함되어 있으나,
 TFLite 모델을 외부에서 사용할 경우 위 조건에 맞는 전처리가 선행되어야 함
 
-📐 모델 구조 설명
+## 📐 모델 구조 설명
 
 이 프로젝트는 YAMNet의 사전학습된 음향 특징(score)을 기반으로, **수면 중 발생 가능한 소리 이벤트(이갈이, 코골이, 기침, 수면 중 말하기)**를 식별하기 위한 후처리 레이어를 직접 설계하고, 이를 기존 모델에 통합하여 **경량화(TFLite 변환)**한 작업입니다.
 
@@ -98,7 +101,7 @@ TFLite 모델을 외부에서 사용할 경우 위 조건에 맞는 전처리가
     최종적으로 TensorFlow Lite 형식으로 변환하여 모바일 환경에서도 실행 가능하도록 경량화했습니다.
 
 
-🛠 사용 기술 스택 (Tech Stack)
+## 🛠 사용 기술 스택 (Tech Stack)
     Framework: TensorFlow 2.18
 
     모델 구성 및 학습, 사용자 정의 레이어 설계에 활용
