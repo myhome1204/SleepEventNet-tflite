@@ -62,62 +62,64 @@ TFLite 모델을 외부에서 사용할 경우 위 조건에 맞는 전처리가
 
 주요 흐름
 
-1.입력
-    20초 길이의 .wav 오디오 파일을 입력으로 받습니다.
+**1.입력**
 
-2.특징 추출
-    OpenAI의 YAMNet 모델을 통해 오디오로부터 **프레임별 521개의 score(class 확률)**를 추출합니다.
+20초 길이의 .wav 오디오 파일을 입력으로 받습니다.
 
-3.이벤트별 score 조합 정의 및 패턴 탐색
+**2.특징 추출**
 
-    각 소리 이벤트(이갈이, 코골이, 기침, 수면 중 말하기)에 대해,
-    해당 클래스에서 score에 자주 등장하는 상위 class 번호와 확률값을 수집합니다.
+OpenAI의 YAMNet 모델을 통해 오디오로부터 **프레임별 521개의 score(class 확률)**를 추출합니다.
 
-    그 후 Grid Search 기반 랜덤 조합 탐색을 수행하여,
-    가장 높은 정확도로 해당 이벤트를 분류하는 최적 class 조합 패턴을 자동으로 도출합니다.
+**3.이벤트별 score 조합 정의 및 패턴 탐색**
 
-    이 조합별로 전체 데이터에서의 **정답률을 기반으로 가중치(weight)**를 계산합니다.
-    (예: 조합 A가 이갈이 데이터 중 80%를 맞췄다면 → 가중치 0.8)
+각 소리 이벤트(이갈이, 코골이, 기침, 수면 중 말하기)에 대해,
+해당 클래스에서 score에 자주 등장하는 상위 class 번호와 확률값을 수집합니다.
 
-4.이벤트별 사용자 정의 Keras 레이어 구성
+그 후 Grid Search 기반 랜덤 조합 탐색을 수행하여,
+가장 높은 정확도로 해당 이벤트를 분류하는 최적 class 조합 패턴을 자동으로 도출합니다.
 
-    위에서 정의한 class 조합과 가중치를 기반으로,
-    각 이벤트(이갈이, 코골이, 기침, 말하기)에 대해
-    Custom Keras Layer를 구현했습니다.
+이 조합별로 전체 데이터에서의 **정답률을 기반으로 가중치(weight)**를 계산합니다.
+(예: 조합 A가 이갈이 데이터 중 80%를 맞췄다면 → 가중치 0.8)
 
-    각 레이어는 YAMNet의 score 출력을 입력 받아,
-    해당 이벤트의 **발생 여부 및 점수(score)**를 반환합니다.
+**4.이벤트별 사용자 정의 Keras 레이어 구성**
 
-5.정상 상태(Normal) 판단
+위에서 정의한 class 조합과 가중치를 기반으로,
+각 이벤트(이갈이, 코골이, 기침, 말하기)에 대해
+Custom Keras Layer를 구현했습니다.
 
-    네 가지 이벤트 중 모두 비발생일 경우, Normal로 분류되며,
-    정상 상태 여부도 함께 출력됩니다.
-    정상 상태라고 판단될 떄 점수는 1점으로 고정입니다.
+각 레이어는 YAMNet의 score 출력을 입력 받아,
+해당 이벤트의 **발생 여부 및 점수(score)**를 반환합니다.
 
-6.모델 통합 및 TFLite 변환
+**5.정상 상태(Normal) 판단**
 
-    YAMNet과 사용자 정의 레이어들을 하나의 모델로 통합하고,
+네 가지 이벤트 중 모두 비발생일 경우, Normal로 분류되며,
+정상 상태 여부도 함께 출력됩니다.
+정상 상태라고 판단될 떄 점수는 1점으로 고정입니다.
 
-    최종적으로 TensorFlow Lite 형식으로 변환하여 모바일 환경에서도 실행 가능하도록 경량화했습니다.
+**6.모델 통합 및 TFLite 변환**
+
+YAMNet과 사용자 정의 레이어들을 하나의 모델로 통합하고,
+
+최종적으로 TensorFlow Lite 형식으로 변환하여 모바일 환경에서도 실행 가능하도록 경량화했습니다.
 
 
 ## 🛠 사용 기술 스택 (Tech Stack)
-    Framework: TensorFlow 2.18
+Framework: TensorFlow 2.18
 
-    모델 구성 및 학습, 사용자 정의 레이어 설계에 활용
+모델 구성 및 학습, 사용자 정의 레이어 설계에 활용
 
-    Deployment: TensorFlow Lite (TFLite)
+Deployment: TensorFlow Lite (TFLite)
 
-    모바일/임베디드 환경용 추론 모델 변환
+모바일/임베디드 환경용 추론 모델 변환
 
-    Audio Processing: Librosa, SciPy
+Audio Processing: Librosa, SciPy
 
-    wav 파일 로딩, 샘플링 정규화, 특징 추출 등
+wav 파일 로딩, 샘플링 정규화, 특징 추출 등
 
-    Data Handling: NumPy, Pandas
+Data Handling: NumPy, Pandas
 
-    score 분석 및 클래스 조합 탐색(Grid Search)
+score 분석 및 클래스 조합 탐색(Grid Search)
 
-    Visualization: Matplotlib, Seaborn
+Visualization: Matplotlib, Seaborn
 
-    Class combination 시각화, 결과 확인용
+Class combination 시각화, 결과 확인용
